@@ -4,7 +4,9 @@
   tasks:
    - name: Install Package git
      yum: name=git state=present
+
    - name: Install Package
      yum: name=httpd state=present
+     
    - name: Start httpd service
      service: name=httpd state=started
