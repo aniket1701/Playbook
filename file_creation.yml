@@ -1,5 +1,15 @@
-- hosts: webservers
+---
+- name: File Creation Example
+  hosts: webservers
   become: true
+  gather_facts: false
+
   tasks:
-  - name: Create a file
-    file: path=/home/batch-26.txt state=touch
+    - name: Create a file with specific permissions
+      file:
+        path: /home/batch-26.txt
+        state: touch
+        owner: root
+        group: root
+        mode: '0644'
+      tags: file_creation

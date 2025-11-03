@@ -1,10 +1,21 @@
 ---
-- hosts: webservers
+- name: Create multiple directories using loops
+  hosts: webservers
   become: true
+  gather_facts: false
+
+  vars:
+    dirs_to_create:
+      - /home/vn1
+      - /home/vn2
+      - /home/vn3
+
   tasks:
-  - name: Create multiple directories
-    file: path={{item}} state=directory
-    with_items:
-    - '/home/vn1'
-    - '/home/vn2'
-    - '/home/vn3'
+    - name: Ensure directories are created with proper permissions
+      file:
+        path: "{{ item }}"
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+      loop: "{{ dirs_to_create }}"                  # use loop insted of with_items

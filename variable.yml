@@ -1,7 +1,13 @@
-- hosts: all
+---
+- name: Display a Custom Message Using Variables
+  hosts: all
+  gather_facts: false
+
   vars:
-   name: batch-26
+    name: Aniket
+    city: Pune
+
   tasks:
-   - name: Ansible Basic Variable Example
-     debug:
-      msg: "{{ name }}"
+    - name: Show name and city information
+      debug:
+        msg: "Myself {{ name }} i'm from {{ city }}"

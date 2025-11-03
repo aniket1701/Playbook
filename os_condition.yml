@@ -1,15 +1,27 @@
 ---
-
-- hosts: all
-  become: yes
+- name: Install Apache Web Server on Different OS Families
+  hosts: all
+  become: true
+  gather_facts: true
 
   tasks:
-  - name: Install Apache on Ubuntu
-    apt: name=apache2 state=present
-    when: ansible_os_family == "Debian"
-    ignore_errors: True
+    - name: Install Apache (Debian/Ubuntu)
+      apt:
+        name: apache2
+        state: present
+        update_cache: yes
+      when: ansible_os_family == "Debian"
+      tags: apache_install
 
-  - name: Install httpd on Red Hat
-    yum: name=httpd state=present
-    when: ansible_os_family == "RedHat"
-    ignore_errors: True
+    - name: Install Apache (RedHat/CentOS)
+      yum:
+        name: httpd
+        state: present
+      when: ansible_os_family == "RedHat"
+      tags: apache_install
+
+    - name: Ensure Apache service is started
+      service:
+        name: "{{ 'apache2' if ansible_os_family == 'Debian' else 'httpd' }}"
+        state: started
+        enabled: true
